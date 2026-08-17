@@ -1,13 +1,46 @@
 // RI Landscaping — site behavior
 // 1. Mobile nav toggle
-// 2. Procedural texture for the hero "deep edge" graphic
-// 3. Contact form -> mailto handoff (no backend yet)
-// 4. Footer year
+// 2. Hero photo crossfade (featured jobs' after shots)
+// 3. Contact form -> real submission via Netlify Forms (AJAX, no page reload)
+// 4. Featured gallery -> auto-cycling, built from PREFERRED_JOB_IDS
+// 5. Full gallery -> click-to-toggle before/after, built from JOBS
+// 6. Footer year
+
+/* =========================================================
+   GALLERY DATA
+   See GALLERY-GUIDE.md for full instructions.
+   Filenames must follow: job{N}-after-{n}.jpg / job{N}-before-{n}.jpg
+   ========================================================= */
+const PREFERRED_JOB_IDS = ["job13", "job12", "job9", "job18", "job17", "job15"];
+
+const JOBS = [
+  { id: "job1", afterCount: 1, beforeCount: 1 },
+  { id: "job2", afterCount: 1, beforeCount: 1 },
+  { id: "job3", afterCount: 2, beforeCount: 1 },
+  { id: "job4", afterCount: 1, beforeCount: 2 },
+  { id: "job5", afterCount: 1, beforeCount: 1 },
+  { id: "job6", afterCount: 1, beforeCount: 1 },
+  { id: "job7", afterCount: 3, beforeCount: 4 },
+  { id: "job8", afterCount: 1, beforeCount: 1 },
+  { id: "job9", afterCount: 1, beforeCount: 1 },
+  { id: "job10", afterCount: 3, beforeCount: 1 },
+  { id: "job11", afterCount: 2, beforeCount: 2 },
+  { id: "job12", afterCount: 1, beforeCount: 3 },
+  { id: "job13", afterCount: 2, beforeCount: 2 },
+  { id: "job14", afterCount: 1, beforeCount: 1 },
+  { id: "job15", afterCount: 2, beforeCount: 1 },
+  { id: "job16", afterCount: 1, beforeCount: 1 },
+  { id: "job17", afterCount: 1, beforeCount: 1 },
+  { id: "job18", afterCount: 1, beforeCount: 1 },
+  { id: "job19", afterCount: 3, beforeCount: 3 },
+];
 
 document.addEventListener("DOMContentLoaded", () => {
   initNavToggle();
-  drawHeroTexture();
+  initHeroPhoto();
   initContactForm();
+  buildFeatured();
+  buildFullGallery();
   document.getElementById("year").textContent = new Date().getFullYear();
 });
 
@@ -30,59 +63,34 @@ function initNavToggle() {
   });
 }
 
-/* ---------- Hero graphic: turf ticks + mulch dots ---------- */
-function drawHeroTexture() {
-  const svg = document.querySelector(".edge-svg");
-  if (!svg) return;
+/* ---------- Hero photo: crossfades through featured jobs' after-1 shots ---------- */
+function initHeroPhoto() {
+  const container = document.getElementById("hero-photo");
+  if (!container) return;
 
-  const turfGroup = svg.querySelector(".turf-texture");
-  const mulchGroup = svg.querySelector(".mulch-dots");
-  const plantGroup = svg.querySelector(".plant-marks");
+  const sources = PREFERRED_JOB_IDS.map((id) => `images/${id}-after-1.jpg`);
+  if (sources.length === 0) return;
 
-  // Turf blade ticks scattered on the green side
-  if (turfGroup) {
-    let ticks = "";
-    for (let i = 0; i < 90; i++) {
-      const x = Math.random() * 520;
-      const y = Math.random() * 420;
-      const len = 6 + Math.random() * 6;
-      const angle = -20 + Math.random() * 40;
-      ticks += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y - len}" transform="rotate(${angle} ${x} ${y})"/>`;
-    }
-    turfGroup.innerHTML = ticks;
-  }
+  sources.forEach((src, idx) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = "";
+    if (idx === 0) img.classList.add("is-active");
+    container.appendChild(img);
+  });
 
-  // Mulch dots on the bed side
-  if (mulchGroup) {
-    let dots = "";
-    for (let i = 0; i < 70; i++) {
-      const x = Math.random() * 260;
-      const y = Math.random() * 420;
-      const r = 1.5 + Math.random() * 2.5;
-      dots += `<circle cx="${x}" cy="${y}" r="${r}"/>`;
-    }
-    mulchGroup.innerHTML = dots;
-  }
-
-  // Marigold-style plant marks near the edge on the bed side
-  if (plantGroup) {
-    const positions = [
-      [40, 60], [70, 130], [35, 210], [80, 300], [45, 370]
-    ];
-    let marks = "";
-    positions.forEach(([x, y]) => {
-      for (let p = 0; p < 6; p++) {
-        const angle = (p / 6) * Math.PI * 2;
-        const px = x + Math.cos(angle) * 6;
-        const py = y + Math.sin(angle) * 6;
-        marks += `<circle cx="${px}" cy="${py}" r="3"/>`;
-      }
-    });
-    plantGroup.innerHTML = marks;
+  if (sources.length > 1) {
+    let current = 0;
+    setInterval(() => {
+      const imgs = container.querySelectorAll("img");
+      imgs[current].classList.remove("is-active");
+      current = (current + 1) % imgs.length;
+      imgs[current].classList.add("is-active");
+    }, 5000);
   }
 }
 
-/* ---------- Contact form ---------- */
+/* ---------- Contact form: real Netlify Forms submission ---------- */
 function initContactForm() {
   const form = document.getElementById("contact-form");
   const note = document.getElementById("form-note");
@@ -93,20 +101,114 @@ function initContactForm() {
 
     const name = form.name.value.trim();
     const area = form.area.value.trim();
-    const service = form.service.value;
-    const message = form.message.value.trim();
 
     if (!name || !area) {
       note.textContent = "Please add your name and neighbourhood so we know where the job is.";
       return;
     }
 
-    const subject = encodeURIComponent(`Quote request: ${service} — ${area}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nArea: ${area}\nService: ${service}\n\n${message}`
-    );
+    const formData = new FormData(form);
+    const encoded = new URLSearchParams(formData).toString();
 
-    window.location.href = `mailto:caden@rilandscaping.ca?subject=${subject}&body=${body}`;
-    note.textContent = "Opening your email app to send this — if nothing opens, just call or email us directly.";
+    note.textContent = "Sending...";
+
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encoded,
+    })
+      .then(() => {
+        note.textContent = "Got it — we'll be in touch shortly. You can also call or text 647 529 2017 directly.";
+        form.reset();
+      })
+      .catch(() => {
+        note.textContent = "Something didn't go through — please call or text 647 529 2017 or email caden@rilandscaping.ca directly.";
+      });
+  });
+}
+
+/* ---------- Shared: builds the image list for a job ---------- */
+function getJobImages(job) {
+  const images = [];
+  for (let i = 1; i <= job.afterCount; i++) {
+    images.push({ src: `images/${job.id}-after-${i}.jpg`, phase: "After" });
+  }
+  for (let i = 1; i <= job.beforeCount; i++) {
+    images.push({ src: `images/${job.id}-before-${i}.jpg`, phase: "Before" });
+  }
+  return images;
+}
+
+/* ---------- Shared: builds one job-card element ---------- */
+function buildJobCard(job, { autoCycle }) {
+  const card = document.createElement("div");
+  card.className = "job-card";
+
+  const label = document.createElement("span");
+  label.className = "job-card-label";
+  label.textContent = "After";
+  card.appendChild(label);
+
+  const images = getJobImages(job);
+  images.forEach((imgData, idx) => {
+    const img = document.createElement("img");
+    img.src = imgData.src;
+    img.alt = `${imgData.phase} photo of a landscaping job`;
+    img.dataset.phase = imgData.phase;
+    if (idx === 0) img.classList.add("is-active");
+    card.appendChild(img);
+  });
+
+  if (images.length > 1) {
+    let current = 0;
+    const advance = () => {
+      const imgs = card.querySelectorAll("img");
+      imgs[current].classList.remove("is-active");
+      current = (current + 1) % imgs.length;
+      imgs[current].classList.add("is-active");
+      label.textContent = imgs[current].dataset.phase;
+    };
+
+    if (autoCycle) {
+      setInterval(advance, 5000);
+    } else {
+      card.addEventListener("click", advance);
+    }
+  }
+
+  return card;
+}
+
+/* ---------- Featured section: auto-cycling, curated jobs ---------- */
+function buildFeatured() {
+  const grid = document.getElementById("featured-grid");
+  if (!grid) return;
+
+  const featuredJobs = PREFERRED_JOB_IDS
+    .map((id) => JOBS.find((j) => j.id === id))
+    .filter(Boolean);
+
+  if (featuredJobs.length === 0) {
+    grid.innerHTML = `<p style="color: var(--color-moss); font-family: var(--font-mono); font-size: 0.85rem;">Featured jobs coming soon.</p>`;
+    return;
+  }
+
+  featuredJobs.forEach((job) => {
+    grid.appendChild(buildJobCard(job, { autoCycle: true }));
+  });
+}
+
+/* ---------- Full gallery: all jobs, click-to-toggle, no auto timers ---------- */
+function buildFullGallery() {
+  const grid = document.getElementById("gallery-grid");
+  if (!grid) return;
+
+  if (JOBS.length === 0) {
+    grid.innerHTML = `<p style="color: var(--color-moss); font-family: var(--font-mono); font-size: 0.85rem;">Gallery photos coming soon — see GALLERY-GUIDE.md to add them.</p>`;
+    return;
+  }
+
+  JOBS.forEach((job) => {
+    grid.appendChild(buildJobCard(job, { autoCycle: false }));
   });
 }

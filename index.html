@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RI Landscaping — Softscape Installs &amp; Weed Clearance | Vaughan, Richmond Hill, Toronto GTA</title>
-<meta name="description" content="RI Landscaping installs precision deep-edge garden beds and mass annual plantings against mature perennials, plus one-time weed clearance, across Woodbridge, Thornhill, Kleinburg, King City, Richmond Hill, North York, Vaughan, Toronto and Markham.">
+<title>RI Landscaping — Landscape Revival &amp; Creation | Vaughan, Richmond Hill, Toronto GTA</title>
+<meta name="description" content="RI Landscaping installs precision Victorian trench edging and mass annual planting against mature perennials, plus landscape revival for established beds, across Woodbridge, Thornhill, Kleinburg, King City, Richmond Hill, North York, Vaughan, Toronto and Markham.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,19 +16,27 @@
 
 <header class="site-header">
   <div class="wrap header-row">
-    <a href="#top" class="logo">RI<span class="logo-dot">·</span>Landscaping</a>
+    <a href="#top" class="logo">
+      <img src="images/Logo.jpg" alt="RI Landscaping" class="logo-img">
+      <span class="logo-tagline">Landscape Creation &amp; Revival</span>
+    </a>
 
     <nav class="site-nav" id="site-nav">
       <a href="#services">Services</a>
-      <a href="#areas">Service Area</a>
+      <a href="#full-gallery">Gallery</a>
       <a href="#process">Process</a>
+      <a href="#areas">Service Area</a>
       <a href="#contact">Contact</a>
     </nav>
 
-    <a class="call-btn" href="tel:6475292017">
-      <span class="call-btn-label">Call</span>
-      <span class="call-btn-number">647&nbsp;529&nbsp;2017</span>
-    </a>
+    <div class="contact-btns">
+      <a class="call-btn" href="tel:6475292017">
+        <span class="call-btn-label">Call</span>
+      </a>
+      <a class="call-btn call-btn--text" href="sms:6475292017">
+        <span class="call-btn-label">Text</span>
+      </a>
+    </div>
 
     <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle menu">
       <span></span><span></span><span></span>
@@ -43,36 +51,30 @@
     <div class="wrap hero-row">
       <div class="hero-copy">
         <p class="eyebrow">Woodbridge · Thornhill · Kleinburg · Richmond Hill · Vaughan · Toronto</p>
-        <h1>Where the lawn stops and the bed begins, we make it look intentional.</h1>
-        <p class="hero-sub">Deep-edge softscape installs set against mature perennials, and a one-time weed clearance for the beds that just need a clean reset — no maintenance contract required.</p>
+        <h1>Landscape creation and revival across the GTA.</h1>
+        <p class="hero-sub">Victorian trench edging and mass annual planting set against mature perennials, and a full landscape revival for beds that have gotten away from you — no maintenance contract required.</p>
         <div class="hero-actions">
           <a href="#contact" class="btn btn-primary">Request a Quote</a>
-          <a href="tel:6475292017" class="btn btn-ghost">Call 647&nbsp;529&nbsp;2017</a>
+          <a href="tel:6475292017" class="btn btn-ghost">Call</a>
+          <a href="sms:6475292017" class="btn btn-ghost">Text</a>
         </div>
       </div>
 
-      <div class="hero-graphic" aria-hidden="true">
-        <svg viewBox="0 0 520 420" class="edge-svg" role="img" aria-label="Illustration of a curved deep-edge garden bed line separating turf from a mulched bed">
-          <!-- turf side -->
-          <rect x="0" y="0" width="520" height="420" fill="var(--color-turf)"/>
-          <g class="turf-texture" stroke="var(--color-moss)" stroke-width="2" stroke-linecap="round" opacity="0.35">
-            <!-- generated blade ticks -->
-          </g>
+      <div class="hero-photo" id="hero-photo" aria-hidden="true">
+        <!-- Populated by script.js — crossfades through the featured jobs' after shots -->
+      </div>
+    </div>
+  </section>
 
-          <!-- bed side, clipped by the edge path -->
-          <clipPath id="bedClip">
-            <path d="M -10,430 C 90,360 120,300 90,230 C 60,150 160,120 170,40 L -10,-10 Z"/>
-          </clipPath>
-          <g clip-path="url(#bedClip)">
-            <rect x="-10" y="-10" width="540" height="440" fill="var(--color-loam)"/>
-            <g class="mulch-dots" fill="var(--color-clay)" opacity="0.55"></g>
-            <g class="plant-marks" fill="var(--color-marigold)"></g>
-          </g>
+  <!-- FEATURED WORK -->
+  <section class="featured" id="featured">
+    <div class="wrap">
+      <p class="eyebrow">Featured work</p>
+      <h2>A few of our favourites.</h2>
+      <p class="featured-sub">Each one cycles through the after shots, then the before — give it a few seconds.</p>
 
-          <!-- the cut edge line itself, drawn on load -->
-          <path id="edgeLine" d="M -10,430 C 90,360 120,300 90,230 C 60,150 160,120 170,40 L -10,-10"
-                fill="none" stroke="var(--color-paper)" stroke-width="4" stroke-linecap="round"/>
-        </svg>
+      <div class="featured-grid" id="featured-grid">
+        <!-- Populated by script.js from PREFERRED_JOB_IDS -->
       </div>
     </div>
   </section>
@@ -81,40 +83,53 @@
   <section class="services" id="services">
     <div class="wrap">
       <p class="eyebrow">What we do</p>
-      <h2>Two jobs. Done properly.</h2>
+      <h2>Two ways in. One standard.</h2>
 
       <div class="service-grid">
         <article class="service-card service-card--primary">
-          <p class="service-kicker">Signature install</p>
-          <h3>Softscape &amp; Deep Edge</h3>
-          <p>A precision-cut edge and a mass planting of a tight, deliberate variety of annuals, set against your existing mature perennials so the new work reads like it's always been there. This is the job we build the whole season around.</p>
+          <p class="service-kicker">Starting from scratch</p>
+          <h3>Landscape Creation</h3>
+          <p>Garden bed design, sod removal, and bed creation from the ground up — finished with a Victorian trench edge and a mass planting of a tight, deliberate variety of annuals. Built to look like it's always been there.</p>
           <ul class="service-list">
-            <li>Deep edging, cut and held clean</li>
+            <li>Garden bed design &amp; sod removal</li>
+            <li>Victorian trench edging</li>
             <li>Mass annual planting — minimal variety, maximum impact</li>
-            <li>Garden bed design around mature perennials</li>
             <li>Mulching &amp; finish grading</li>
           </ul>
-          <a href="#contact" class="btn btn-primary">Book a Softscape Install</a>
+          <a href="#contact" class="btn btn-primary">Book a Creation</a>
         </article>
 
         <article class="service-card">
-          <p class="service-kicker">One-time, no contract</p>
-          <h3>Weed Clearance</h3>
-          <p>Beds get away from everyone eventually. This is a single, thorough clearance — weeded, edged, and mulched back to a clean line — with no ongoing maintenance package attached. If we're already working in your neighbourhood, ask about same-week booking.</p>
+          <p class="service-kicker">Already established</p>
+          <h3>Landscape Revival</h3>
+          <p>If you've got mature perennials sitting in an unmaintained bed, you're sitting on more than you think. We cut the edge deeper than it's ever been, clear it back, and the maturity already in the ground does the rest — the result reads more established than the day it went in, not less.</p>
           <ul class="service-list">
+            <li>Victorian trench edging, redefined</li>
             <li>Full weed pull &amp; weed prevention layer</li>
-            <li>Edge redefined</li>
-            <li>Fresh mulch pass</li>
-            <li>One visit, one price</li>
+            <li>Perennial trimming</li>
+            <li>Fresh mulch pass, plus annual planting if you want it</li>
           </ul>
-          <a href="#contact" class="btn btn-ghost">Get a Weed Clearance</a>
+          <a href="#contact" class="btn btn-ghost">Book a Revival</a>
         </article>
       </div>
 
       <details class="more-services">
         <summary>Also available</summary>
-        <p>Hedging &amp; annual pruning, tree trimming &amp; tree planting, sod installation, perennial planting. Ask when you request your quote.</p>
+        <p>Hedging &amp; annual pruning, tree trimming &amp; tree planting, sod installation, standalone perennial planting. Ask when you request your quote.</p>
       </details>
+    </div>
+  </section>
+
+  <!-- FULL GALLERY -->
+  <section class="gallery" id="full-gallery">
+    <div class="wrap">
+      <p class="eyebrow">All our work</p>
+      <h2>Every project, at a glance.</h2>
+      <p class="gallery-sub">Tap any photo to see the before.</p>
+
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- Populated by script.js from the JOBS array. See GALLERY-GUIDE.md for how to add jobs. -->
+      </div>
     </div>
   </section>
 
@@ -141,35 +156,35 @@
   <section class="process" id="process">
     <div class="wrap">
       <p class="eyebrow">How a job runs</p>
-      <h2>Four steps. No surprises.</h2>
+      <h2>What actually happens.</h2>
 
       <ol class="process-list">
         <li>
           <span class="process-num">01</span>
           <div>
-            <h3>Request a quote</h3>
-            <p>Tell us what you're looking at — call, or send details through the form below.</p>
+            <h3>Reach out</h3>
+            <p>Text a few photos and the rough scope, or give us a call. For smaller, clear-cut jobs, that's often enough for a same-day quote.</p>
           </div>
         </li>
         <li>
           <span class="process-num">02</span>
           <div>
-            <h3>Walk the site</h3>
-            <p>We look at what's already growing so new work sits naturally against it.</p>
+            <h3>Site walk <span class="process-note">(larger jobs)</span></h3>
+            <p>We walk the property together, then follow up with your quote by text.</p>
           </div>
         </li>
         <li>
           <span class="process-num">03</span>
           <div>
-            <h3>Install or clear</h3>
-            <p>Edge cut, planting or clearance done, mulch laid — in one visit where possible.</p>
+            <h3>Design talk <span class="process-note">(design jobs)</span></h3>
+            <p>For garden bed design or planting layout, we go back and forth over text refining the plan before locking in a price.</p>
           </div>
         </li>
         <li>
           <span class="process-num">04</span>
           <div>
-            <h3>Clean handoff</h3>
-            <p>No debris left behind. The line is clean and that's the job.</p>
+            <h3>Job day</h3>
+            <p>The work gets done — installed, planted, or cleared — in one visit where possible, with no debris left behind.</p>
           </div>
         </li>
       </ol>
@@ -182,11 +197,11 @@
       <div class="contact-info">
         <p class="eyebrow">Get in touch</p>
         <h2>Tell us what you're looking at.</h2>
-        <p class="contact-sub">Fastest response is by phone. For quotes with details or photos, use the form or email directly.</p>
+        <p class="contact-sub">Fastest response is by text. For quotes with more detail or photos, use the form or email directly.</p>
 
         <dl class="contact-details">
           <div>
-            <dt>Call</dt>
+            <dt>Call or Text</dt>
             <dd><a href="tel:6475292017">647 529 2017</a></dd>
           </div>
           <div>
@@ -200,7 +215,10 @@
         </dl>
       </div>
 
-      <form class="contact-form" id="contact-form" novalidate>
+      <form class="contact-form" id="contact-form" name="quote-request" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="quote-request">
+        <p class="hidden-field"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+
         <div class="field">
           <label for="name">Name</label>
           <input type="text" id="name" name="name" required>
@@ -212,8 +230,8 @@
         <div class="field">
           <label for="service">What do you need?</label>
           <select id="service" name="service">
-            <option value="Softscape & Deep Edge">Softscape &amp; Deep Edge install</option>
-            <option value="Weed Clearance">One-time Weed Clearance</option>
+            <option value="Landscape Creation">Landscape Creation</option>
+            <option value="Landscape Revival">Landscape Revival</option>
             <option value="Not sure">Not sure yet</option>
           </select>
         </div>
