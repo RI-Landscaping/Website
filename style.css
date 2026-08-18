@@ -1,8 +1,5 @@
 /* =========================================================
    RI LANDSCAPING — DESIGN TOKENS
-   Colors sampled directly from the brand logo.
-   Signature: the "deep edge" line — a cut curve separating
-   turf from a mulched bed. Everything else stays quiet.
    ========================================================= */
 
 :root {
@@ -59,6 +56,8 @@ h3 { font-size: 1.25rem; font-weight: 600; }
 p { margin: 0 0 var(--space-2); }
 a { color: inherit; }
 
+.on-dark { color: var(--color-paper) !important; }
+
 .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--space-3); }
 
 .skip-link {
@@ -74,7 +73,7 @@ a { color: inherit; }
   letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--color-moss); margin: 0 0 var(--space-1);
 }
-.eyebrow--on-dark { color: var(--color-marigold); }
+.eyebrow--on-dark { color: var(--color-marigold) !important; }
 
 .hidden-field { position: absolute; left: -9999px; }
 
@@ -90,6 +89,8 @@ a { color: inherit; }
 .btn-primary:hover { background: var(--color-loam); transform: translateY(-1px); }
 .btn-ghost { background: transparent; border-color: var(--color-moss); color: var(--color-moss); }
 .btn-ghost:hover { background: var(--color-moss); color: var(--color-paper); }
+.btn-ghost--on-dark { border-color: var(--color-paper); color: var(--color-paper); }
+.btn-ghost--on-dark:hover { background: var(--color-paper); color: var(--color-loam); }
 .btn-full { width: 100%; }
 
 /* =========================================================
@@ -145,47 +146,62 @@ a { color: inherit; }
 .nav-toggle span { width: 22px; height: 2px; background: var(--color-loam); }
 
 /* =========================================================
-   HERO
+   HERO — full-bleed photo background, crossfade + slow zoom
    ========================================================= */
-.hero { padding: var(--space-6) 0 var(--space-5); }
-.hero-row { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-5); align-items: center; }
-.hero-sub { max-width: 46ch; font-size: 1.05rem; color: var(--color-moss); }
-.hero-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap; }
-
-.hero-photo {
+.hero {
   position: relative;
-  aspect-ratio: 4 / 3.2;
-  border-radius: var(--radius);
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  z-index: 0;
   overflow: hidden;
   background: var(--color-loam);
 }
-.hero-photo img {
+.hero-bg img {
   position: absolute; inset: 0;
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 75%; /* biases the crop to protect the bottom of the photo */
   opacity: 0;
-  transition: opacity 1.4s ease;
+  transform: scale(1);
+  transition: opacity 1.6s ease;
+  animation: hero-zoom 9s ease-in-out infinite;
+  animation-play-state: paused;
 }
-.hero-photo img.is-active { opacity: 1; }
+.hero-bg img.is-active {
+  opacity: 1;
+  animation-play-state: running;
+}
+@keyframes hero-zoom {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.06); }
+}
+.hero-scrim {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(27,53,35,0.55) 0%,
+    rgba(27,53,35,0.35) 40%,
+    rgba(27,53,35,0.65) 100%
+  );
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-sub { max-width: 46ch; font-size: 1.1rem; opacity: 0.92; }
+.hero-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap; }
 
 /* =========================================================
-   FEATURED WORK
+   Shared job-card styling (gallery)
    ========================================================= */
-.featured { padding: var(--space-6) 0; }
-.featured-sub { color: var(--color-moss); max-width: 50ch; }
-.featured-grid {
-  margin-top: var(--space-4);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-3);
-}
-.featured-grid .job-card { aspect-ratio: 4 / 3; }
-
-/* Shared job-card styling, used by both featured + full gallery */
 .job-card {
   position: relative;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--color-loam);
+  aspect-ratio: 4 / 3;
 }
 .job-card img {
   position: absolute; inset: 0;
@@ -217,33 +233,39 @@ a { color: inherit; }
 .service-kicker { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-clay); margin-bottom: var(--space-1); }
 .service-list { margin: var(--space-2) 0 var(--space-3); padding-left: 1.1rem; }
 .service-list li { margin-bottom: 0.4rem; }
-.more-services { margin-top: var(--space-4); font-size: 0.92rem; border-top: 1px solid rgba(27,53,35,0.14); padding-top: var(--space-2); }
-.more-services summary { cursor: pointer; font-weight: 600; color: var(--color-moss); }
+
+.also-ask { margin-top: var(--space-4); }
+.also-ask-label {
+  font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--color-loam); margin-bottom: var(--space-2);
+}
+.pill-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.pill {
+  font-size: 0.9rem; font-weight: 600; text-decoration: none;
+  color: var(--color-loam); background: #fff;
+  border: 1.5px solid var(--color-moss);
+  padding: 0.5rem 1rem; border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.pill:hover { background: var(--color-moss); color: var(--color-paper); }
 
 /* =========================================================
-   FULL GALLERY (click-to-toggle before/after, no auto-cycle)
+   RECENT WORK GALLERY (auto-cycling fade, single gallery)
    ========================================================= */
 .gallery { padding: var(--space-6) 0; }
 .gallery-sub { color: var(--color-moss); max-width: 50ch; }
 .gallery-grid {
   margin-top: var(--space-4);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: var(--space-2);
-}
-.gallery-grid .job-card { aspect-ratio: 4 / 3; cursor: pointer; }
-.gallery-grid .job-card::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(27,53,35,0.35), transparent 40%);
-  pointer-events: none;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-3);
 }
 
 /* =========================================================
    SERVICE AREA
    ========================================================= */
 .areas { background: var(--color-moss); padding: var(--space-5) 0; }
-.on-dark { color: var(--color-paper); }
 .area-list { list-style: none; display: flex; flex-wrap: wrap; gap: 0.7rem; padding: 0; margin: var(--space-3) 0 0; }
 .area-list li {
   font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-loam);
@@ -309,19 +331,13 @@ a { color: inherit; }
   .header-row { position: relative; }
   .nav-toggle { display: flex; }
   .logo-tagline { display: none; }
-  .hero-row { grid-template-columns: 1fr; }
-  .hero-photo { order: -1; }
-  .featured-grid { grid-template-columns: 1fr; }
   .service-grid { grid-template-columns: 1fr; }
   .process-list { grid-template-columns: 1fr 1fr; }
   .contact-row { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 640px) {
-  .featured-grid { grid-template-columns: 1fr; }
-}
-
 @media (max-width: 520px) {
+  .hero { min-height: 100vh; }
   .process-list { grid-template-columns: 1fr; }
   .area-list li { font-size: 0.78rem; }
 }

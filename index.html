@@ -23,7 +23,7 @@
 
     <nav class="site-nav" id="site-nav">
       <a href="#services">Services</a>
-      <a href="#full-gallery">Gallery</a>
+      <a href="#recent-work">Gallery</a>
       <a href="#process">Process</a>
       <a href="#areas">Service Area</a>
       <a href="#contact">Contact</a>
@@ -46,35 +46,21 @@
 
 <main id="main">
 
-  <!-- HERO -->
+  <!-- HERO: full-bleed photo background -->
   <section class="hero" id="top">
-    <div class="wrap hero-row">
-      <div class="hero-copy">
-        <p class="eyebrow">Woodbridge · Thornhill · Kleinburg · Richmond Hill · Vaughan · Toronto</p>
-        <h1>Landscape creation and revival across the GTA.</h1>
-        <p class="hero-sub">Victorian trench edging and mass annual planting set against mature perennials, and a full landscape revival for beds that have gotten away from you — no maintenance contract required.</p>
-        <div class="hero-actions">
-          <a href="#contact" class="btn btn-primary">Request a Quote</a>
-          <a href="tel:6475292017" class="btn btn-ghost">Call</a>
-          <a href="sms:6475292017" class="btn btn-ghost">Text</a>
-        </div>
-      </div>
-
-      <div class="hero-photo" id="hero-photo" aria-hidden="true">
-        <!-- Populated by script.js — crossfades through the featured jobs' after shots -->
-      </div>
+    <div class="hero-bg" id="hero-bg" aria-hidden="true">
+      <!-- Populated by script.js — crossfades + slow zooms through the hero rotation -->
     </div>
-  </section>
+    <div class="hero-scrim" aria-hidden="true"></div>
 
-  <!-- FEATURED WORK -->
-  <section class="featured" id="featured">
-    <div class="wrap">
-      <p class="eyebrow">Featured work</p>
-      <h2>A few of our favourites.</h2>
-      <p class="featured-sub">Each one cycles through the after shots, then the before — give it a few seconds.</p>
-
-      <div class="featured-grid" id="featured-grid">
-        <!-- Populated by script.js from PREFERRED_JOB_IDS -->
+    <div class="wrap hero-content">
+      <p class="eyebrow eyebrow--on-dark">Woodbridge · Thornhill · Kleinburg · Richmond Hill · Vaughan · Toronto</p>
+      <h1 class="on-dark">Landscape creation and revival across the GTA.</h1>
+      <p class="hero-sub on-dark">Victorian trench edging and mass annual planting set against mature perennials, and a full landscape revival for beds that have gotten away from you — no maintenance contract required.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Request a Quote</a>
+        <a href="tel:6475292017" class="btn btn-ghost btn-ghost--on-dark">Call</a>
+        <a href="sms:6475292017" class="btn btn-ghost btn-ghost--on-dark">Text</a>
       </div>
     </div>
   </section>
@@ -96,7 +82,7 @@
             <li>Mass annual planting — minimal variety, maximum impact</li>
             <li>Mulching &amp; finish grading</li>
           </ul>
-          <a href="#contact" class="btn btn-primary">Book a Creation</a>
+          <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
         </article>
 
         <article class="service-card">
@@ -109,26 +95,35 @@
             <li>Perennial trimming</li>
             <li>Fresh mulch pass, plus annual planting if you want it</li>
           </ul>
-          <a href="#contact" class="btn btn-ghost">Book a Revival</a>
+          <a href="#contact" class="btn btn-ghost">Get a Free Quote</a>
         </article>
       </div>
 
-      <details class="more-services">
-        <summary>Also available</summary>
-        <p>Hedging &amp; annual pruning, tree trimming &amp; tree planting, sod installation, standalone perennial planting. Ask when you request your quote.</p>
-      </details>
+      <div class="also-ask">
+        <p class="also-ask-label">Also ask about</p>
+        <div class="pill-row">
+          <a href="#contact" class="pill" data-service="Weeding">Weeding</a>
+          <a href="#contact" class="pill" data-service="Mulching">Mulching</a>
+          <a href="#contact" class="pill" data-service="Hedging & Pruning">Hedging &amp; Pruning</a>
+          <a href="#contact" class="pill" data-service="Tree Trimming">Tree Trimming</a>
+          <a href="#contact" class="pill" data-service="Tree Planting">Tree Planting</a>
+          <a href="#contact" class="pill" data-service="Sod Installation">Sod Installation</a>
+          <a href="#contact" class="pill" data-service="Perennial Planting">Perennial Planting</a>
+          <a href="#contact" class="pill" data-service="Garden Bed Design">Garden Bed Design</a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- FULL GALLERY -->
-  <section class="gallery" id="full-gallery">
+  <!-- RECENT WORK GALLERY (single gallery, auto-cycling fade) -->
+  <section class="gallery" id="recent-work">
     <div class="wrap">
-      <p class="eyebrow">All our work</p>
-      <h2>Every project, at a glance.</h2>
-      <p class="gallery-sub">Tap any photo to see the before.</p>
+      <p class="eyebrow">Recent work</p>
+      <h2>A look at some recent jobs.</h2>
+      <p class="gallery-sub">Each one cycles through the matched before-and-after shots — give it a few seconds.</p>
 
       <div class="gallery-grid" id="gallery-grid">
-        <!-- Populated by script.js from the JOBS array. See GALLERY-GUIDE.md for how to add jobs. -->
+        <!-- Populated by script.js from the JOBS array -->
       </div>
     </div>
   </section>

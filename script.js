@@ -1,46 +1,76 @@
 // RI Landscaping — site behavior
 // 1. Mobile nav toggle
-// 2. Hero photo crossfade (featured jobs' after shots)
+// 2. Full-bleed hero photo: crossfade + slow zoom, hero rotation jobs
 // 3. Contact form -> real submission via Netlify Forms (AJAX, no page reload)
-// 4. Featured gallery -> auto-cycling, built from PREFERRED_JOB_IDS
-// 5. Full gallery -> click-to-toggle before/after, built from JOBS
+// 4. Recent Work gallery -> single gallery, auto-cycling fade, built from JOBS
+// 5. "Also ask about" pills -> pre-fill contact form message
 // 6. Footer year
 
 /* =========================================================
    GALLERY DATA
-   See GALLERY-GUIDE.md for full instructions.
-   Filenames must follow: job{N}-after-{n}.jpg / job{N}-before-{n}.jpg
+   Filenames follow: job{N}-after-{n}.jpg / job{N}-before-{n}.jpg
+
+   Each job's `sequence` is the exact, hand-confirmed display
+   order — before/after pairs are matched by angle, not just
+   cycled in filename order. Do not reorder without checking
+   the actual photos.
    ========================================================= */
-const PREFERRED_JOB_IDS = ["job13", "job12", "job9", "job18", "job17", "job15"];
+const HERO_JOB_IDS = ["job13", "job12", "job10", "job18", "job17", "job15"];
 
 const JOBS = [
-  { id: "job1", afterCount: 1, beforeCount: 1 },
-  { id: "job2", afterCount: 1, beforeCount: 1 },
-  { id: "job3", afterCount: 2, beforeCount: 1 },
-  { id: "job4", afterCount: 1, beforeCount: 2 },
-  { id: "job5", afterCount: 1, beforeCount: 1 },
-  { id: "job6", afterCount: 1, beforeCount: 1 },
-  { id: "job7", afterCount: 3, beforeCount: 4 },
-  { id: "job8", afterCount: 1, beforeCount: 1 },
-  { id: "job9", afterCount: 1, beforeCount: 1 },
-  { id: "job10", afterCount: 3, beforeCount: 1 },
-  { id: "job11", afterCount: 2, beforeCount: 2 },
-  { id: "job12", afterCount: 1, beforeCount: 3 },
-  { id: "job13", afterCount: 2, beforeCount: 2 },
-  { id: "job14", afterCount: 1, beforeCount: 1 },
-  { id: "job15", afterCount: 2, beforeCount: 1 },
-  { id: "job16", afterCount: 1, beforeCount: 1 },
-  { id: "job17", afterCount: 1, beforeCount: 1 },
-  { id: "job18", afterCount: 1, beforeCount: 1 },
-  { id: "job19", afterCount: 3, beforeCount: 3 },
+  { id: "job1", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job2", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job3", sequence: [
+    { phase: "after", num: 2 }, { phase: "before", num: 1 }, { phase: "after", num: 1 },
+  ]},
+  { id: "job4", sequence: [
+    { phase: "after", num: 1 }, { phase: "before", num: 1 }, { phase: "before", num: 2 },
+  ]},
+  { id: "job5", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job6", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job7", sequence: [
+    { phase: "after", num: 1 }, { phase: "before", num: 1 },
+    { phase: "after", num: 2 }, { phase: "after", num: 3 },
+    { phase: "before", num: 2 }, { phase: "before", num: 3 }, { phase: "before", num: 4 },
+  ]},
+  { id: "job8", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job9", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job10", sequence: [
+    { phase: "after", num: 1 }, { phase: "before", num: 1 },
+    { phase: "after", num: 2 }, { phase: "after", num: 3 },
+  ]},
+  { id: "job11", sequence: [
+    { phase: "after", num: 1 }, { phase: "before", num: 1 },
+    { phase: "after", num: 2 }, { phase: "before", num: 2 },
+  ]},
+  { id: "job12", sequence: [
+    { phase: "before", num: 1 }, { phase: "before", num: 2 },
+    { phase: "before", num: 3 }, { phase: "after", num: 1 },
+  ]},
+  { id: "job13", sequence: [
+    { phase: "after", num: 2 }, { phase: "before", num: 1 },
+    { phase: "after", num: 1 }, { phase: "before", num: 2 },
+  ]},
+  { id: "job14", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job15", sequence: [
+    { phase: "after", num: 1 }, { phase: "before", num: 1 }, { phase: "after", num: 2 },
+  ]},
+  { id: "job16", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job17", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job18", sequence: [{ phase: "after", num: 1 }, { phase: "before", num: 1 }] },
+  { id: "job19", sequence: [
+    { phase: "after", num: 1 }, { phase: "before", num: 1 },
+    { phase: "after", num: 2 }, { phase: "before", num: 2 },
+    { phase: "after", num: 3 }, { phase: "before", num: 3 },
+  ]},
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
   initNavToggle();
   initHeroPhoto();
   initContactForm();
-  buildFeatured();
-  buildFullGallery();
+  initServicePills();
+  buildGallery();
   document.getElementById("year").textContent = new Date().getFullYear();
 });
 
@@ -63,12 +93,12 @@ function initNavToggle() {
   });
 }
 
-/* ---------- Hero photo: crossfades through featured jobs' after-1 shots ---------- */
+/* ---------- Hero background: full-bleed crossfade + slow zoom ---------- */
 function initHeroPhoto() {
-  const container = document.getElementById("hero-photo");
+  const container = document.getElementById("hero-bg");
   if (!container) return;
 
-  const sources = PREFERRED_JOB_IDS.map((id) => `images/${id}-after-1.jpg`);
+  const sources = HERO_JOB_IDS.map((id) => `images/${id}-after-1.jpg`);
   if (sources.length === 0) return;
 
   sources.forEach((src, idx) => {
@@ -86,7 +116,7 @@ function initHeroPhoto() {
       imgs[current].classList.remove("is-active");
       current = (current + 1) % imgs.length;
       imgs[current].classList.add("is-active");
-    }, 5000);
+    }, 6000);
   }
 }
 
@@ -127,88 +157,59 @@ function initContactForm() {
   });
 }
 
-/* ---------- Shared: builds the image list for a job ---------- */
-function getJobImages(job) {
-  const images = [];
-  for (let i = 1; i <= job.afterCount; i++) {
-    images.push({ src: `images/${job.id}-after-${i}.jpg`, phase: "After" });
-  }
-  for (let i = 1; i <= job.beforeCount; i++) {
-    images.push({ src: `images/${job.id}-before-${i}.jpg`, phase: "Before" });
-  }
-  return images;
-}
+/* ---------- "Also ask about" pills: pre-fill the contact message on click ---------- */
+function initServicePills() {
+  const pills = document.querySelectorAll(".pill[data-service]");
+  const message = document.getElementById("message");
+  if (!pills.length || !message) return;
 
-/* ---------- Shared: builds one job-card element ---------- */
-function buildJobCard(job, { autoCycle }) {
-  const card = document.createElement("div");
-  card.className = "job-card";
-
-  const label = document.createElement("span");
-  label.className = "job-card-label";
-  label.textContent = "After";
-  card.appendChild(label);
-
-  const images = getJobImages(job);
-  images.forEach((imgData, idx) => {
-    const img = document.createElement("img");
-    img.src = imgData.src;
-    img.alt = `${imgData.phase} photo of a landscaping job`;
-    img.dataset.phase = imgData.phase;
-    if (idx === 0) img.classList.add("is-active");
-    card.appendChild(img);
-  });
-
-  if (images.length > 1) {
-    let current = 0;
-    const advance = () => {
-      const imgs = card.querySelectorAll("img");
-      imgs[current].classList.remove("is-active");
-      current = (current + 1) % imgs.length;
-      imgs[current].classList.add("is-active");
-      label.textContent = imgs[current].dataset.phase;
-    };
-
-    if (autoCycle) {
-      setInterval(advance, 5000);
-    } else {
-      card.addEventListener("click", advance);
-    }
-  }
-
-  return card;
-}
-
-/* ---------- Featured section: auto-cycling, curated jobs ---------- */
-function buildFeatured() {
-  const grid = document.getElementById("featured-grid");
-  if (!grid) return;
-
-  const featuredJobs = PREFERRED_JOB_IDS
-    .map((id) => JOBS.find((j) => j.id === id))
-    .filter(Boolean);
-
-  if (featuredJobs.length === 0) {
-    grid.innerHTML = `<p style="color: var(--color-moss); font-family: var(--font-mono); font-size: 0.85rem;">Featured jobs coming soon.</p>`;
-    return;
-  }
-
-  featuredJobs.forEach((job) => {
-    grid.appendChild(buildJobCard(job, { autoCycle: true }));
+  pills.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const service = pill.dataset.service;
+      message.value = `I'm interested in: ${service}`;
+    });
   });
 }
 
-/* ---------- Full gallery: all jobs, click-to-toggle, no auto timers ---------- */
-function buildFullGallery() {
+/* ---------- Recent Work gallery: all jobs, auto-cycling fade ---------- */
+function buildGallery() {
   const grid = document.getElementById("gallery-grid");
   if (!grid) return;
 
   if (JOBS.length === 0) {
-    grid.innerHTML = `<p style="color: var(--color-moss); font-family: var(--font-mono); font-size: 0.85rem;">Gallery photos coming soon — see GALLERY-GUIDE.md to add them.</p>`;
+    grid.innerHTML = `<p style="color: var(--color-moss); font-family: var(--font-mono); font-size: 0.85rem;">Gallery photos coming soon.</p>`;
     return;
   }
 
   JOBS.forEach((job) => {
-    grid.appendChild(buildJobCard(job, { autoCycle: false }));
+    const card = document.createElement("div");
+    card.className = "job-card";
+
+    const label = document.createElement("span");
+    label.className = "job-card-label";
+    label.textContent = job.sequence[0].phase === "after" ? "After" : "Before";
+    card.appendChild(label);
+
+    job.sequence.forEach((step, idx) => {
+      const img = document.createElement("img");
+      img.src = `images/${job.id}-${step.phase}-${step.num}.jpg`;
+      img.alt = `${step.phase === "after" ? "After" : "Before"} photo of a landscaping job`;
+      img.dataset.phase = step.phase === "after" ? "After" : "Before";
+      if (idx === 0) img.classList.add("is-active");
+      card.appendChild(img);
+    });
+
+    grid.appendChild(card);
+
+    if (job.sequence.length > 1) {
+      let current = 0;
+      setInterval(() => {
+        const imgs = card.querySelectorAll("img");
+        imgs[current].classList.remove("is-active");
+        current = (current + 1) % imgs.length;
+        imgs[current].classList.add("is-active");
+        label.textContent = imgs[current].dataset.phase;
+      }, 5000);
+    }
   });
 }
